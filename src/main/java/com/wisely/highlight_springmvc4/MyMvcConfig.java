@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -12,9 +14,9 @@ import org.springframework.web.servlet.view.JstlView;
 //的位置，其中，@EnableWebMvc注解会开启一些默认配置，
 //如一些ViewResolver或者MessageConverter等。
 @Configuration
-@EnableWebMvc
+@EnableWebMvc //①@EnableWebMvc开启SpringMVC支持，若无此句，重写 WebMvcConfigurerAdapter方法无效。
 @ComponentScan("com.wisely.highlight_springmvc4")
-public class MyMvcConfig {
+public class MyMvcConfig extends WebMvcConfigurerAdapter {//②继承WebMvcConfigurerAdapter类，重写其方法可对 Spring MVC进行配置。
     @Bean
     public InternalResourceViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -37,4 +39,11 @@ public class MyMvcConfig {
     //View的职责就是使用model、request、response对象，并将渲染
     //的视图（不一定是html，可能是json、xml、pdf）返回给浏览
     //器。
+
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //③addResourceLocations指的是文件放置的目录， addResourceHandler指的是对外暴露的访问路径。
+        registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/assets/");//3
+    }
 }
