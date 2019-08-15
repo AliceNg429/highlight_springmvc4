@@ -4,10 +4,7 @@ import com.wisely.highlight_springmvc4.interceptor.DemoInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -19,6 +16,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc //①@EnableWebMvc开启SpringMVC支持，若无此句，重写 WebMvcConfigurerAdapter方法无效。
 @ComponentScan("com.wisely.highlight_springmvc4")
 public class MyMvcConfig extends WebMvcConfigurerAdapter {//②继承WebMvcConfigurerAdapter类，重写其方法可对 Spring MVC进行配置。
+
     @Bean
     public InternalResourceViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -43,6 +41,10 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {//②继承WebMvcConfi
     //器。
 
 
+    /**
+     * 程序的静态文件（js、css、图片）等需要直接访问，这时
+     * 我们可以在配置里重写addResourceHandlers方法来实现
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //③addResourceLocations指的是文件放置的目录， addResourceHandler指的是对外暴露的访问路径。
@@ -51,7 +53,7 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {//②继承WebMvcConfi
 
     @Bean
     //配置拦截器的Bean。
-    public DemoInterceptor demoInterceptor(){
+    public DemoInterceptor demoInterceptor() {
         return new DemoInterceptor();
     }
 
@@ -60,4 +62,29 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {//②继承WebMvcConfi
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(demoInterceptor());
     }
+
+    //此处无任何业务处理，只是简单的页面转向
+    /**
+     * 可以写成这样
+     * @RequestMapping("/index")
+     * public String hello(){ return "index";}
+     * 也可以在配置文件里直接配置，这样实现的代码更简洁，管理更集中
+     */
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/index").setViewName("/index");
+    }
+
+    //在Spring MVC中，路径参数如果带“.”的话，“.”后面的值将被忽略
+    //通过重写configurePathMatch方法可不忽略“.”后面的参数
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer.setUseSuffixPatternMatch(false);
+    }
+
+    /**
+     * 更多配置请查看WebMvcConfigurerAdapter类的API。因其
+     * 是WebMvcConfigurer接口的实现，所以WebMvcConfigurer的
+     * API内的方法也可以用来配置MVC。
+     */
 }
