@@ -4,6 +4,8 @@ import com.wisely.highlight_springmvc4.interceptor.DemoInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -73,6 +75,7 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {//②继承WebMvcConfi
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/index").setViewName("/index");
+        registry.addViewController("/toUpload").setViewName("/upload");
     }
 
     //在Spring MVC中，路径参数如果带“.”的话，“.”后面的值将被忽略
@@ -87,4 +90,12 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {//②继承WebMvcConfi
      * 是WebMvcConfigurer接口的实现，所以WebMvcConfigurer的
      * API内的方法也可以用来配置MVC。
      */
+
+    //Spring MVC通过 配置一个MultipartResolver来上传文件
+    @Bean
+    public MultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(1000000);
+        return multipartResolver;
+    }
 }

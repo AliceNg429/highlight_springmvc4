@@ -95,9 +95,9 @@
 
         <!--&lt;!&ndash;对json和xml格式的支持 获得对象和json或xml之间的转换&ndash;&gt;-->
         <!--<dependency>-->
-            <!--<groupId>com.fasterxml.jackson.dataformat</groupId>-->
-            <!--<artifactId>jackson-dataformat-xml</artifactId>-->
-            <!--<version>2.5.3</version>-->
+        <!--<groupId>com.fasterxml.jackson.dataformat</groupId>-->
+        <!--<artifactId>jackson-dataformat-xml</artifactId>-->
+        <!--<version>2.5.3</version>-->
         <!--</dependency>-->
         <!--这里特别指出，在实际项目中，我们其实主要支持json数
         据，没必要同时支持json和xml，因为json比xml更简洁。由于
@@ -107,6 +107,19 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.5.3</version>
+        </dependency>
+
+        <!-- file upload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+        <!-- 非必需，可简化I/O操作 -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.3</version>
         </dependency>
     </dependencies>
     <build>
