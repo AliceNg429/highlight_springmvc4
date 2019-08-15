@@ -1,9 +1,11 @@
 package com.wisely.highlight_springmvc4;
 
+import com.wisely.highlight_springmvc4.interceptor.DemoInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -45,5 +47,17 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {//②继承WebMvcConfi
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //③addResourceLocations指的是文件放置的目录， addResourceHandler指的是对外暴露的访问路径。
         registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/assets/");//3
+    }
+
+    @Bean
+    //配置拦截器的Bean。
+    public DemoInterceptor demoInterceptor(){
+        return new DemoInterceptor();
+    }
+
+    @Override
+    //重写addInterceptors方法，注册拦截器。
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(demoInterceptor());
     }
 }
