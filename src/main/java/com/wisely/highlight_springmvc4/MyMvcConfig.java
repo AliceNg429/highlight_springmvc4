@@ -82,6 +82,7 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {//②继承WebMvcConfi
         registry.addViewController("/index").setViewName("/index");
         registry.addViewController("/toUpload").setViewName("/upload");
         registry.addViewController("/converter").setViewName("/converter");
+        registry.addViewController("/sse").setViewName("/sse");
     }
 
     //在Spring MVC中，路径参数如果带“.”的话，“.”后面的值将被忽略
