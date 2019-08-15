@@ -1,14 +1,18 @@
 package com.wisely.highlight_springmvc4;
 
 import com.wisely.highlight_springmvc4.interceptor.DemoInterceptor;
+import com.wisely.highlight_springmvc4.messageconverter.MyMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import java.util.List;
 
 //此处无任何特别，只是一个普通的Spring配置类。这里我
 //们配置了一个JSP的ViewResolver，用来映射路径和实际页面
@@ -66,16 +70,18 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {//②继承WebMvcConfi
     }
 
     //此处无任何业务处理，只是简单的页面转向
+
     /**
      * 可以写成这样
-     * @RequestMapping("/index")
-     * public String hello(){ return "index";}
+     *
+     * @RequestMapping("/index") public String hello(){ return "index";}
      * 也可以在配置文件里直接配置，这样实现的代码更简洁，管理更集中
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/index").setViewName("/index");
         registry.addViewController("/toUpload").setViewName("/upload");
+        registry.addViewController("/converter").setViewName("/converter");
     }
 
     //在Spring MVC中，路径参数如果带“.”的话，“.”后面的值将被忽略
@@ -97,5 +103,27 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {//②继承WebMvcConfi
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setMaxUploadSize(1000000);
         return multipartResolver;
+    }
+
+    /**
+     * 配置自定义的HttpMessageConverter的Bean，在Spring MVC
+     * 里注册HttpMessageConverter有两个方法：
+     * <p>
+     * 1.configureMessageConverters：重载会覆盖掉Spring MVC默
+     * 认注册的多个HttpMessageConverter。
+     * <p>
+     * 2.extendMessageConverters：仅添加一个自定义的
+     * HttpMessageConverter，不覆盖默认注册的 HttpMessageConverter。
+     * <p>
+     * 所以在此例中我们重写extendMessageConverters：
+     */
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(converter());
+    }
+
+    @Bean
+    public MyMessageConverter converter() {
+        return new MyMessageConverter();
     }
 }
