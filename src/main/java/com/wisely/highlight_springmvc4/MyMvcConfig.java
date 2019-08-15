@@ -1,7 +1,12 @@
 package com.wisely.highlight_springmvc4;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+
 //此处无任何特别，只是一个普通的Spring配置类。这里我
 //们配置了一个JSP的ViewResolver，用来映射路径和实际页面
 //的位置，其中，@EnableWebMvc注解会开启一些默认配置，
