@@ -121,6 +121,20 @@
             <artifactId>commons-io</artifactId>
             <version>2.3</version>
         </dependency>
+
+        <!--这里<scope>test</scope>说明这些包的存活是在test周期， 也就意味着发布时我们将不包含这些jar包。-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-framework.version}</version>
+            <!--<scope>test</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <!--<scope>test</scope>-->
+        </dependency>
     </dependencies>
     <build>
         <plugins>
